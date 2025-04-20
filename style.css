@@ -38,7 +38,13 @@ main {
     height: 500px;
 
     background-color: #fff;
-    border: 2px solid #ccc;
+    border: 2px solid #b50cd6;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+
+    display: grid;
 }
   
+.canvas > .cell{
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+}
