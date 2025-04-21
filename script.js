@@ -1,8 +1,16 @@
+import { Eye } from './eye.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('YEah hahaha');
     //generateGrid();
+    const canvas = document.querySelector(".canvas");
+    const eye1 = new Eye(canvas);
+    const eye2 = new Eye(canvas);
+    const eye3 = new Eye(canvas);
+    const eye4 = new Eye(canvas);
 
-    generateEye();
+
+    /* generateEye(); */
 });
   
 function generateGrid() {
@@ -44,21 +52,6 @@ function generateGrid() {
 
 
 // =============== Eye Functions ===============
-function blink(eye) {
-    eye.classList.add("blinking");
-    setTimeout(() => {
-        eye.classList.remove("blinking");
-    }, 200); // Blink duration
-}
-
-function jitter(range = 5) {
-    return (Math.random() - 0.5) * 2 * range;
-}
-
-function clamp(val, min, max) {
-    return Math.max(min, Math.min(max, val));
-}
-
 // Function to calculate the distance between the mouse and the eye center
 function calculatePointerDistance(mouseX, mouseY, eyeCenterX, eyeCenterY) {
     const dx = mouseX * window.innerWidth - eyeCenterX;
@@ -67,35 +60,51 @@ function calculatePointerDistance(mouseX, mouseY, eyeCenterX, eyeCenterY) {
 }
 
 // Function to move the light based on the mouse position
-function moveLight(mouseX, mouseY, eyeCenterX, eyeCenterY, light) {
+function moveLight(mouseX, mouseY, eyeCenterX, eyeCenterY, light, eyeRect) {
     const lightOffset = 8; // Small max movement for light
     const lightX = ((mouseX * window.innerWidth - eyeCenterX) / eyeRect.width) * lightOffset;
     const lightY = ((mouseY * window.innerHeight - eyeCenterY) / eyeRect.height) * lightOffset;
     light.style.transform = `translate(${lightX}px, ${lightY}px)`;
     light.style.opacity = "0.2";
 }
-  
+
 // Function to update the iris movement
 function updateIrisPosition(mouseX, mouseY, eyeRect, pointerNear) {
     const eyeCenterX = eyeRect.left + eyeRect.width / 2;
     const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-  
+
     const maxOffset = 8;
     let x, y;
-  
+
     if (pointerNear) {
-      x = ((mouseX * window.innerWidth - eyeCenterX) / eyeRect.width) * maxOffset + jitter(1);
-      y = ((mouseY * window.innerHeight - eyeCenterY) / eyeRect.height) * maxOffset + jitter(1);
-      x = clamp(x, -maxOffset, maxOffset);
-      y = clamp(y, -maxOffset, maxOffset);
+        x = ((mouseX * window.innerWidth - eyeCenterX) / eyeRect.width) * maxOffset + jitter(1);
+        y = ((mouseY * window.innerHeight - eyeCenterY) / eyeRect.height) * maxOffset + jitter(1);
+        x = clamp(x, -maxOffset, maxOffset);
+        y = clamp(y, -maxOffset, maxOffset);
     } else {
-      x = jitter(maxOffset);
-      y = jitter(maxOffset);
+        x = jitter(maxOffset);
+        y = jitter(maxOffset);
     }
-  
     return { x, y };
-  }
-  
+}
+
+function blink(eye) {
+    eye.classList.add("blinking");
+    setTimeout(() => {
+        eye.classList.remove("blinking");
+    }, 200); // Blink duration
+}
+
+// Jitter utility function
+function jitter(range = 5) {
+    return (Math.random() - 0.5) * 2 * range;
+}
+
+// Clamp utility function
+function clamp(val, min, max) {
+    return Math.max(min, Math.min(max, val));
+}
+
 function generateEye() {
     const canvas = document.querySelector(".canvas");
     const eye = document.createElement("div");
@@ -117,54 +126,58 @@ function generateEye() {
     let mouseY = 0.5;
     let pointerNear = false;
     let currentInterval = null;
-    let currentDelay = null;
+    const farDelay = 1000;
 
-    // Random blink every 2–5 seconds
+    // Blink randomly every 2–5 seconds
     setInterval(() => {
-        if (Math.random() < 0.5) { // 50% chance to blink
+        if (Math.random() < 0.5) {
             blink(eye);
         }
     }, 2000 + Math.random() * 3000);
-      
-    function jitter(range = 5) {
-      return (Math.random() - 0.5) * 2 * range;
-    }
-  
-    function clamp(val, min, max) {
-      return Math.max(min, Math.min(max, val));
-    }
-  
-    function updateIris() {
-      const eyeRect = eye.getBoundingClientRect();
-      const eyeCenterX = eyeRect.left + eyeRect.width / 2;
-      const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-     
-      // Calculate distance between pointer and eye center
-      const distance = calculatePointerDistance(mouseX, mouseY, eyeCenterX, eyeCenterY);
-  
-      pointerNear = distance < 250;
-        
-      // Update iris position
-      const { x, y } = updateIrisPosition(mouseX, mouseY, eyeRect, pointerNear);
-  
-      iris.style.transform = `translate(${x}px, ${y}px)`;
 
-      // Restart interval only if delay needs to change
-      const newDelay = pointerNear ? 100 : 1000;
-      if (newDelay !== currentDelay) {
-        clearInterval(currentInterval);
-        currentDelay = newDelay;
-        currentInterval = setInterval(updateIris, currentDelay);
-      }
+    function updateIris() {
+        const eyeRect = eye.getBoundingClientRect();
+        const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+        const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+
+        const distance = calculatePointerDistance(mouseX, mouseY, eyeCenterX, eyeCenterY);
+        pointerNear = distance < 250;
+
+        const { x, y } = updateIrisPosition(mouseX, mouseY, eyeRect, pointerNear);
+        iris.style.transform = `translate(${x}px, ${y}px)`;
+
+        if (pointerNear) {
+            moveLight(mouseX, mouseY, eyeCenterX, eyeCenterY, light, eyeRect);
+        } else {
+            light.style.opacity = "0";
+        }
     }
-  
+
+    // Handle mouse movement
     document.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX / window.innerWidth;
-      mouseY = e.clientY / window.innerHeight;
+        mouseX = e.clientX / window.innerWidth;
+        mouseY = e.clientY / window.innerHeight;
+
+        const eyeRect = eye.getBoundingClientRect();
+        const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+        const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+        const distance = calculatePointerDistance(mouseX, mouseY, eyeCenterX, eyeCenterY);
+
+        const wasNear = pointerNear;
+        pointerNear = distance < 250;
+
+        if (pointerNear) {
+            if (!wasNear && currentInterval) {
+                clearInterval(currentInterval);
+                currentInterval = null;
+            }
+            updateIris(); // Immediate update when pointer is near
+        } else if (!currentInterval) {
+            // Restart slow updates when pointer becomes far
+            currentInterval = setInterval(updateIris, farDelay);
+        }
     });
-  
-    // Start the first interval
-    currentDelay = 1000;
-    currentInterval = setInterval(updateIris, currentDelay);
+
+    // Initial slow updates since pointer is far
+    currentInterval = setInterval(updateIris, farDelay);
 }
- 
