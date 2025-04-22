@@ -5,7 +5,6 @@ export class Eye {
         this.y = y;
         this.distanceThreshold = distanceThreshold;
 
-        // Create HTML elements
         this.eye = document.createElement("div");
         this.ball = document.createElement("div");
         this.iris = document.createElement("div");

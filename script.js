@@ -1,34 +1,17 @@
 import { Eye } from './eye.js';
 import { generateGrid } from './grid.js';
+import { Torch } from './torch.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('YEah hahaha');
+    console.log('Created by CJ-Cepe | © 2025');
+    console.log('YEah 🤘 hahaha');
+
     generateGrid();
+
+    new Torch();
 
     const cells = document.querySelectorAll('.cell');
     cells.forEach(cell => {
-        new Eye(cell); // Assuming Eye class handles the eye creation
-    });
-
-    // Torch  
-    const torch = document.getElementById('torch-overlay');
-
-    document.addEventListener('mousemove', e => {
-    const x = `${e.clientX}px`;
-    const y = `${e.clientY}px`;
-    torch.style.setProperty('--x', x);
-    torch.style.setProperty('--y', y);
-    });
-
-    document.body.addEventListener('mouseenter', () => {
-        torch.classList.remove('mouse-leave'); 
-    });
-
-    document.body.addEventListener('mouseleave', () => {
-        torch.classList.add('mouse-leave');
-    });
-
-    document.addEventListener('mouseenter', () => {
-        torch.classList.remove('mouse-leave');
+        new Eye(cell);
     });
 });

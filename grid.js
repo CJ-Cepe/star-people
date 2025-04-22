@@ -1,7 +1,7 @@
 export function generateGrid() {
     const canvas = document.querySelector(".canvas");
     const cellSize = 100;
-    canvas.innerHTML = ""; // ??
+    canvas.innerHTML = "";
 
     const canvasRect = canvas.getBoundingClientRect();
     const styles = getComputedStyle(canvas);
@@ -16,7 +16,7 @@ export function generateGrid() {
     const cols = Math.floor(availableWidth / (cellSize + gap));
     const rows = Math.floor(availableHeight / (cellSize + gap));
     const totalCells = cols * rows;
-    const extraCells = 15;
+    const extraCells = 35;
     let consumedGridCell = 0;
 
     // ⭐
