@@ -36,7 +36,7 @@ export function generateGrid() {
         consumedGridCell += rowSpan * colSpan;
 
         // random border radius
-        const randRadius = () => Math.floor(Math.random() * 1) + 10; // 5 to 10
+        const randRadius = () => Math.floor(Math.random() * 3) + 6; // 5 to 10
 
         const tl = randRadius();
         const tr = randRadius();

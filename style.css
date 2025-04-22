@@ -1,116 +1,120 @@
-    /* Global Styles */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    overflow: hidden;
+    background-color: #000000;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+    
+/* C A N V A S */
+.canvas {
+    --gap-size: 2px;
+
+    height:100%;
+    width: 100%;
+    background-color: rgb(85, 57, 41);
+    position: relative;
+    overflow: hidden;
+    
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+    grid-auto-rows: 100px;
+    gap: var(--gap-size);
+    grid-auto-flow: row dense;
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9;
+        background-image: url('./vein.webp');
+        background-repeat: repeat;
+        opacity: 0.1;
+        mix-blend-mode: multiply;
+    }
+}
+    
+/* C E L L */
+.cell{
+    position: relative;
+
+    background-image: url("./skin.webp");
+    background-size: cover; 
+    background-repeat: repeat;
+    background-position: center;
+    background-color: rgba(143, 101, 76, 0.3); 
+    background-blend-mode: multiply;
+}
+
+/* E Y E S */
+
+.eye {
+    --eye-size: 30px;
+    position: relative;
+    background-color: #834a3b;
+    width: var(--eye-size);
+    height: var(--eye-size);
+    overflow: hidden;
+    clip-path: ellipse(35% 30% at 50% 50%);
+    transition: clip-path 0.2s ease-in-out;
+    
+    &.blinking {
+        clip-path: ellipse(50% 0% at 50% 50%);
     }
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f0f0f0;
+    .ball {
+        background-color: #e7dbd0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
 
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
     }
 
-    /* Header & Footer */
-    header, footer {
-        background-color: #4b0082;
-        color: white;
-        padding: 0.5rem;
-        text-align: center;
+    .iris {
+        box-sizing: content-box;
+        background-color: #0a0a0a;
+        width: 5px;
+        height: 5px;
+        border: 3px solid #a76f8f;
+        border-radius: 50%;
+
+        position: absolute;
+        transition: transform 0.1s ease-out;
     }
 
-    /* Canvas */
-    main {
-        padding: 1rem;
-        flex: 1;
-
+    &, .ball, .iris {
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    .canvas {
-        margin: auto;
-        width: 500px;
-        height: 500px;
-
-        background-color: #f7be96;
-        /* border: 2px solid #b50cd6; */
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        border-radius: 15px;
-
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        gap: 5px;
-        grid-auto-flow: row dense;
+    .light {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: radial-gradient(circle at 50% 50%, white 20%, transparent 60%);
+        border-radius: 50%;
+        filter: blur(1px);
+        opacity: 0;
+        pointer-events: none;
     }
-    
-    .canvas > .cell{
-        background-color: #d19209;
-        text-align: center;
-        position: relative;
-        /* border-radius: 10px; */
-        /* border: 1px solid #252501; */
-    }
-
-    /* =============== */
-
-    .eye {
-        position: relative;
-        background-color: #b97b4f;
-        width: 60px;
-        height: 60px;
-        overflow: hidden;
-        clip-path: ellipse(40% 30% at 50% 50%);
-        transition: clip-path 0.2s ease-in-out;
-        
-        &.blinking {
-            clip-path: ellipse(50% 0% at 50% 50%);
-        }
-
-        .ball {
-            background-color: rgb(255, 255, 255);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-
-            position: relative;
-            overflow: hidden;
-            
-        }
-
-        .iris {
-            box-sizing: content-box;
-            background-color: #3a2c27;
-            width: 5px;
-            height: 5px;
-            border: 3px solid #230704;
-            border-radius: 50%;
-
-            position: absolute;
-            transition: transform 0.1s ease-out;
-        }
-
-        &, .ball, .iris {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .light {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle at 50% 50%, white 20%, transparent 60%);
-            border-radius: 50%;
-            filter: blur(1px);
-            opacity: 0;
-            pointer-events: none;
-        }
-    }
+}
 
     

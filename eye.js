@@ -43,7 +43,7 @@ export class Eye {
     // Function to setup blinking
     setupBlink() {
         setInterval(() => {
-            if (Math.random() < 0.9) { // 50% chance to blink
+            if (Math.random() < 0.3) { // % chance to blink
                 this.blink();
             }
         }, 2000 + Math.random() * 3000);
@@ -69,7 +69,7 @@ export class Eye {
         const eyeCenterX = eyeRect.left + eyeRect.width / 2;
         const eyeCenterY = eyeRect.top + eyeRect.height / 2;
 
-        const maxOffset = 8;
+        const maxOffset = 3;
         let x, y;
 
         if (pointerNear) {
@@ -151,24 +151,22 @@ export class Eye {
         });
     }
 
-    // Function to randomly position the eye and apply the clip-path
     positionEyeRandomly() {
-        const cell = this.eye.parentElement; // Get the parent cell of the eye
+        const cell = this.eye.parentElement;
         const cellRect = cell.getBoundingClientRect();
-
-        // Set random position within the cell (no overflow)
-        const randomX = Math.random() * (cellRect.width - 100); // 50px is the eye's width max
-        const randomY = Math.random() * (cellRect.height - 100); // 50px is the eye's height max
-
-        // Apply random position to the eye
+    
+        const eyeWidth = this.eye.offsetWidth || 50;  // fallback 
+        const eyeHeight = this.eye.offsetHeight || 50;
+    
+        const maxX = Math.max(0, cellRect.width - eyeWidth - 10);
+        const maxY = Math.max(0, cellRect.height - eyeHeight - 10);
+    
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+    
         this.eye.style.position = 'absolute';
         this.eye.style.left = `${randomX}px`;
         this.eye.style.top = `${randomY}px`;
-
-        // Apply random clip-path to make the eye elliptical
-        /* const randomWidth = Math.floor(Math.random() * (40 - 20 + 1)) + 20; // 20% - 40%
-        const randomHeight = Math.floor(Math.random() * (40 - 20 + 1)) + 20; // 20% - 40%
-        this.eye.style.clipPath = `ellipse(${randomWidth}% ${randomHeight}% at 50% 50%)`; */
     }
 }
 
