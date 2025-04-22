@@ -20,6 +20,9 @@ export class Eye {
         this.eye.appendChild(this.ball);
         this.ball.appendChild(this.iris);
         this.eye.appendChild(this.light);
+        
+        // Position the eye randomly inside the grid
+        this.positionEyeRandomly();
 
         // Mouse position
         this.mouseX = 0.5;
@@ -40,7 +43,7 @@ export class Eye {
     // Function to setup blinking
     setupBlink() {
         setInterval(() => {
-            if (Math.random() < 0.5) { // 50% chance to blink
+            if (Math.random() < 0.9) { // 50% chance to blink
                 this.blink();
             }
         }, 2000 + Math.random() * 3000);
@@ -146,6 +149,26 @@ export class Eye {
                 this.currentInterval = setInterval(() => this.updateIris(), this.currentDelay);
             }
         });
+    }
+
+    // Function to randomly position the eye and apply the clip-path
+    positionEyeRandomly() {
+        const cell = this.eye.parentElement; // Get the parent cell of the eye
+        const cellRect = cell.getBoundingClientRect();
+
+        // Set random position within the cell (no overflow)
+        const randomX = Math.random() * (cellRect.width - 100); // 50px is the eye's width max
+        const randomY = Math.random() * (cellRect.height - 100); // 50px is the eye's height max
+
+        // Apply random position to the eye
+        this.eye.style.position = 'absolute';
+        this.eye.style.left = `${randomX}px`;
+        this.eye.style.top = `${randomY}px`;
+
+        // Apply random clip-path to make the eye elliptical
+        /* const randomWidth = Math.floor(Math.random() * (40 - 20 + 1)) + 20; // 20% - 40%
+        const randomHeight = Math.floor(Math.random() * (40 - 20 + 1)) + 20; // 20% - 40%
+        this.eye.style.clipPath = `ellipse(${randomWidth}% ${randomHeight}% at 50% 50%)`; */
     }
 }
 
