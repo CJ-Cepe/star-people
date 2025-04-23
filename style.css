@@ -143,8 +143,8 @@ main {
     &.mouse-leave {
         background: radial-gradient(
             circle var(--size) at var(--x) var(--y),
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 1) 100%
+            rgba(0, 0, 0, 0.95) 0%,
+            rgba(0, 0, 0, 0.95) 100%
         );
     }
 }
